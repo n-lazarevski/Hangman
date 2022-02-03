@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Hangman</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<div id="app">
+	<div class="container">
+		<p id="quote" :class="{'strike': gameOver, 'highlight': completed}">
+			<span v-for="word in splitQuote">
+				<template v-for="letter in word"> {{isRevealed(letter)}} </template>
+			</span>
+			<small v-if="completed || gameOver">
+				— {{ quoteAuthor }}
+			</small>
+		</p>
+
+		<div class="status">
+			<h2>Strikes:</h2>
+			<ul class="status">
+				<li v-for="strike in strikes">🚫</li>
+			</ul>
+		</div>
+
+		<div id="button-board">
+			<button v-for="(letter, index) in letters"
+					@click="guess(letter)"
+					:class="{'strike': strikes.includes(letter), 'highlight': guesses.includes(letter)}"
+					:disabled="guesses.includes(letter) || gameOver || completed"
+					>
+				<span class="letter" :class="{'riser': guesses.includes(letter)}">{{ letter }}</span>
+				<span class="background"> </span>
+			</button>
+		</div>
+		
+		<div class="status">
+			<p v-if="!completed && !gameOver">Pick a letter</p>
+			<p v-if="gameOver">You lost this round. Try again?</p>
+			<p v-if="completed">You win!</p>
+		</div>
+
+		<button @click="newGame" id="new-game">New game</button>
+	</div>
+</div>
+  <script src='./vue.min.js'></script>
+  <script src="./script.js"></script>
+</body>
+</html>
